@@ -28,9 +28,12 @@ def next_card():
     canvas.itemconfig(card_title, text="English", fill="black")
     canvas.itemconfig(card_word, text=current_card["English"], fill="black")
 
-
 def is_known():
-    pass
+    to_learn.remove(current_card)
+    data = pandas.DataFrame(to_learn)
+    data.to_csv("./Data/words_to_learn.csv", index=False)
+    next_card()
+
 # ---------------------------- UI SETUP ------------------------- #
 window = Tk()
 window.title("Flash Cards")
