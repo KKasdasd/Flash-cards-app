@@ -1,7 +1,8 @@
 from tkinter import Tk, Canvas, PhotoImage, Button, messagebox
 import pandas
-
-
+import random
+current_card = {}
+to_learn = {}
 BG_COLOR = "#B1DDC6"
 
 
@@ -21,7 +22,12 @@ else:
 
 
 def next_card():
-    pass
+    global current_card
+    current_card = random.choice(to_learn)
+    canvas.itemconfig(card_background, image=font_img)
+    canvas.itemconfig(card_title, text="English", fill="black")
+    canvas.itemconfig(card_word, text=current_card["English"], fill="black")
+
 
 def is_known():
     pass
