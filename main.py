@@ -6,10 +6,9 @@ to_learn = {}
 BG_COLOR = "#B1DDC6"
 
 
-
 # ---------------------------- GENERATE RANDOM WORD ------------------------- #
 
-try: 
+try:
     data = pandas.read_csv("./Data/words_to_learn.csv")
 except FileNotFoundError:
     try:
@@ -22,11 +21,14 @@ else:
 
 
 def next_card():
-    global current_card
+    global current_card, flip_timer
+    window.after_cancel(flip_timer)
     current_card = random.choice(to_learn)
     canvas.itemconfig(card_background, image=font_img)
     canvas.itemconfig(card_title, text="English", fill="black")
     canvas.itemconfig(card_word, text=current_card["English"], fill="black")
+    flip_timer = window.after(3000, flip_card)
+
 
 def is_known():
     to_learn.remove(current_card)
@@ -34,11 +36,19 @@ def is_known():
     data.to_csv("./Data/words_to_learn.csv", index=False)
     next_card()
 
+
+def flip_card():
+    canvas.itemconfig(card_background, image=background_img)
+    canvas.itemconfig(card_title, text="Polish", fill="white")
+    canvas.itemconfig(card_word, text=current_card["Polish"], fill="white")
+
+
 # ---------------------------- UI SETUP ------------------------- #
 window = Tk()
 window.title("Flash Cards")
 window.config(bg=BG_COLOR, padx=100)
 window.minsize(width=1000, height=800)
+flip_timer = window.after(3000, flip_card)
 
 # Canvas
 font_img = PhotoImage(file="./images/card_front.png")
@@ -61,5 +71,7 @@ right_img = PhotoImage(file="./images/right.png")
 right_button = Button(image=right_img, width=right_img.width(),
                       height=right_img.height(), highlightthickness=0, borderwidth=0, bg=BG_COLOR, command=is_known)
 right_button.grid(row=1, column=1, sticky="n")
+
+next_card()
 
 window.mainloop()
