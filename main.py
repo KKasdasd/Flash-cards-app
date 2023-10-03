@@ -1,14 +1,30 @@
-from tkinter import Tk, Canvas, PhotoImage, Button
+from tkinter import Tk, Canvas, PhotoImage, Button, messagebox
+import pandas
+
 
 BG_COLOR = "#B1DDC6"
+
+
+
+# ---------------------------- GENERATE RANDOM WORD ------------------------- #
+
+try: 
+    data = pandas.read_csv("./Data/words_to_learn.csv")
+except FileNotFoundError:
+    try:
+        original_data = pandas.read_csv("./Data/english_words.csv")
+        to_learn = original_data.to_dict(orient="records")
+    except FileNotFoundError:
+        messagebox.showerror(title="Error", message="File not found")
+else:
+    to_learn = data.to_dict(orient="records")
+
 
 def next_card():
     pass
 
 def is_known():
     pass
-
-
 # ---------------------------- UI SETUP ------------------------- #
 window = Tk()
 window.title("Flash Cards")
